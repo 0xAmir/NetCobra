@@ -31,4 +31,4 @@ Note: When no value is provided for the address argument in listen mode the defa
 `nc.py -l -a [127.0.0.1] -p 1337 -d  
 will download to the same file nc.py exists in
   
-###This tool was made for educational purposes only, the author is **NOT** reposonsible for anything you do with this tool
+###This tool was made for educational purposes only, the author is **NOT** responsible for anything you do with this tool
