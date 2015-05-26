@@ -3,12 +3,14 @@ from os import system
 from getopt import getopt, GetoptError
 from modules import *
 from threading import Thread
+from signal import signal, SIGINT
 
 
+def sighandle(signum,frame):
+    print("Termination signal recieved.\nExiting.")
+    exit(1)
 
-
-
-
+signal(SIGINT,sighandle)
 
 
 def usage():
